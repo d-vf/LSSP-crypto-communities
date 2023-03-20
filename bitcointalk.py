@@ -1,70 +1,78 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
-from selenium.webdriver.chrome.service import Service
-
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
+import time
 
-driver = webdriver.Chrome('chromedriver',options=chrome_options)
-# Call url through selenium driver
-# navigate to Bitcoin Discussion board
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+service = Service('/Users/dianavieirafernandes/Desktop/chromedriver_mac64/chromedriver')
+
+driver = webdriver.Chrome(service=service, options=chrome_options)
 driver.get('https://bitcointalk.org/index.php?board=1.0')
 
-# wait for page to load
-wait = WebDriverWait(driver, 10)
-wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'bordercolor')))
-
-# initialize empty dataframe to store post data
-columns = ['Subject', 'Started by', 'Replies', 'Views', 'Last post']
+columns = ['Subject', 'Link', 'Started by', 'Replies', 'Views', 'Last post']
 df = pd.DataFrame(columns=columns)
 
-# loop through pages
 page_num = 1
 while True:
-    # find table element containing post data
-    table_element = driver.find_element(By.CSS_SELECTOR, 'table.bordercolor')
+    wait = WebDriverWait(driver, 20)
+    topics_table = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "table.bordercolor")))
 
-    # find all rows in table
-    rows = table_element.find_elements(By.TAG_NAME, 'tr')
+    topics = driver.find_elements(By.CSS_SELECTOR, "tr:not(.headercolor)")
 
-    # loop through rows and extract data for each post
-    for row in rows:
-        # skip header row
-        if row.get_attribute('class') == 'titlebg':
+    for topic in topics:
+        try:
+            subject = topic.find_element(By.XPATH, ".//td[3]/span/a").text
+            link = topic.find_element(By.XPATH, ".//td[3]/span/a").get_attribute("href")
+            started_by = topic.find_element(By.XPATH, ".//td[4]/a").text
+            replies = topic.find_element(By.XPATH, ".//td[5]").text
+            views = topic.find_element(By.XPATH, ".//td[6]").text
+            last_post = topic.find_element(By.XPATH, ".//td[7]").text
+        except NoSuchElementException:
+            # Skip the row if any element is not found
             continue
 
-        # extract data from columns
-        subject_element = row.find_element(By.CSS_SELECTOR, 'td:nth-child(3) span.subject a')
-        started_by_element = row.find_element(By.CSS_SELECTOR, 'td:nth-child(4) a')
-        replies_element = row.find_element(By.CSS_SELECTOR, 'td:nth-child(5)')
-        views_element = row.find_element(By.CSS_SELECTOR, 'td:nth-child(6)')
-        last_post_element = row.find_element(By.CSS_SELECTOR, 'td:nth-child(7) span small')
+        new_row = pd.DataFrame({
+            'Subject': [subject],
+            'Link': [link],
+            'Started by': [started_by],
+            'Replies': [replies],
+            'Views': [views],
+            'Last post': [last_post]
+        })
 
-        subject = subject_element.text
-        started_by = started_by_element.text
-        replies = replies_element.text
-        views = views_element.text
-        last_post = last_post_element.text
+        df = pd.concat([df, new_row], ignore_index=True)
 
-        # add data to dataframe
-        data = {'Subject': subject, 'Started by': started_by, 'Replies': replies, 'Views': views, 'Last post': last_post}
-        df = df.append(data, ignore_index=True)
+        print("Subject:", subject)
+        print("Link:", link)
+        print("Started by:", started_by)
+        print("Replies:", replies)
+        print("Views:", views)
+        print("Last post:", last_post)
+        print("-------------------------")
 
-    # check if there is a next page
-    next_button = driver.find_element(By.CSS_SELECTOR, 'div.pagesection span.next a')
-    if 'disabled' in next_button.get_attribute('class'):
+    time.sleep(5)
+
+    try:
+        page_link = driver.find_element(By.XPATH, f"//td[@class='middletext']//a[contains(text(), '{page_num + 1}')]")
+        if page_link:
+            page_link.click()
+            page_num += 1
+            print("Navigating to page", page_num)
+        else:
+            print("No more pages found.")
+            break
+    except NoSuchElementException:
+        print("No more pages found.")
         break
 
-    # navigate to next page
-    page_num += 1
-    driver.get(f'https://bitcointalk.org/index.php?board=1.{20*page_num}')
-
-# close driver
 driver.quit()
+df.to_csv("bitcointalk_data.csv", index=False)
 
-# print dataframe
-print(df)
+#use 
+#caffeinate -i /Users/dianavieirafernandes/PycharmProjects/pythonProject1 caffeinate command while running this script to prevent your Mac from going to sleep
