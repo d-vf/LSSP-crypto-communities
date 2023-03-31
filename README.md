@@ -16,9 +16,12 @@ To do:
 approx 60000, that with 1  422.78 seconds per request would need more than 1 week to get all.
 
 E.g 
+* Navigating to page 1 of https://bitcointalk.org/index.php?topic=20333.0
+(...)
+* Navigating to page 44 of https://bitcointalk.org/index.php?topic=20333.0
 
-Processed 7794 posts from https://bitcointalk.org/index.php?topic=20333.0 in 422.78 seconds.
-Processed 10 posts from https://bitcointalk.org/index.php?topic=1649348.0 in 1.84 seconds.
+* Processed 7794 posts from https://bitcointalk.org/index.php?topic=20333.0 in 422.78 seconds.
+* Processed 10 posts from https://bitcointalk.org/index.php?topic=1649348.0 in 1.84 seconds.
 
 * breaking list and running in // 
 
