@@ -1,6 +1,6 @@
 # LSSP-crypto-communities
 
-## Bitacointalk.org scrapper:
+## Bitacointalk.org scraper:
 
 - 1. Scrapper bitcointalk.org selenium getd all links of each board (gets a list of all post within a given board) 
    * bitcointalk.py
@@ -13,6 +13,10 @@
 
 To do:
 approx 60000, that with timeout=10 would need aprox 13,3 days to get all - breaking list and running in // 
+E.g 
+
+Processed 7794 posts from https://bitcointalk.org/index.php?topic=20333.0 in 422.78 seconds.
+Processed 10 posts from https://bitcointalk.org/index.php?topic=1649348.0 in 1.84 seconds.
 
 ## Cypherpunk mailing list
 
