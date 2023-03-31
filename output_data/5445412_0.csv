@@ -1,0 +1,160 @@
+PostID,Username,PostDate,PostContent,PostTitle,PostURL,URL_Source
+https://bitcointalk.org/index.php?topic=5445412.0#1,MiliMil,"March 18, 2023, 05:08:28 PM","The Bitcoin Blockchain can only process around 5 Transactions Per Second (TPS) give or take.
+When you compare this to VISA which has a TPS rate of 2000+ it seems very low.
+If Bitcoin is going to become mainstream in the future the TPS needs to increase greatly.
+Is there a way to increase the scalability whilst also maintaining a high level of decentralisation?",Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61936443#msg61936443,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#,,,,,https://bitcointalk.org/index.php?topic=1680232799.msg1680232799#msg1680232799,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#2,OmegaStarScream,"March 18, 2023, 05:13:58 PM","We already have the lightning network, which should be capable of handling way more transactions than Visa does:
+
+https://twitter.com/Blockstream/status/1502115599874359297",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61936481#msg61936481,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#3,Upgrade00,"March 18, 2023, 05:25:16 PM","You should note that Bitcoin transactions are final, while fiat transfers through different channels are not, at the time when it reflects. This makes it a lopsided comparison to make.
+
+That aside, there has been improvements over the years to scalability, with both off chain and on chain solutions, and there would be more in the coming years, while maintaining decentralization.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61936547#msg61936547,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#4,Kgdktac,"March 18, 2023, 06:58:28 PM","One approach to scaling Bitcoin is through the use of layer two solutions such as the Lightning Network.
+The Lightning Network is a second layer protocol that sits on top of the Bitcoin blockchain and allows for faster and cheaper transactions by using off-chain transactions that are settled periodically on the blockchain.
+This approach can significantly increase the TPS rate while maintaining a high level of decentralization.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61937049#msg61937049,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#5,Kgdktac,"March 18, 2023, 07:05:21 PM","Quote from: Kgdktac on March 18, 2023, 06:58:28 PM
+One approach to scaling Bitcoin is through the use of layer two solutions such as the Lightning Network.
+The Lightning Network is a second layer protocol that sits on top of the Bitcoin blockchain and allows for faster and cheaper transactions by using off-chain transactions that are settled periodically on the blockchain.
+This approach can significantly increase the TPS rate while maintaining a high level of decentralization.
+
+another approach would be the use of Side Chains,   these are separate blockchains that are pegged to the main Bitcoin blockchain and allow for the processing of transactions in parallel.
+Sidechains can be used for specific use cases, such as smart contracts or asset tokenization, and can help to reduce the load on the main Bitcoin blockchain while maintaining decentralization.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61937077#msg61937077,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#6,Aanuoluwatofunmi,"March 18, 2023, 07:22:39 PM","Bitcoin transaction cannot be compared with a centralized institutionizations that has to go through various channels before getting confirmed unlike bitcoin, the transaction charges is another benefit we take advantage of from bitcoin transaction which is fare enough cheaper and faster, scalability challenges could also be evaded through the bitcoin lightning network under the layer 2 protocols.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61937155#msg61937155,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#7,franky1,"March 18, 2023, 07:31:50 PM","someone makes a topic about BITCOIN BLOCKCHAIN
+
+and the usual tribe of alternative network adorers come in and advertise other networks
+
+oh and lightning has a liquidity bottleneck problem that only gets worse the more popular it gets
+
+other alternative networks will come about some that direct bridge to bitcoin and only bitcoin as the ""layer2"" proposition. but some will just be for niche utility. and small value amounts. and others will bridge to multiple mainnets of multiple blockchains.
+
+but lightning is not one that will cope with mass adoption to pay anyone without middlemen",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61937181#msg61937181,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#8,Charles-Tim,"March 18, 2023, 07:51:17 PM","Quote from: MiliMil on March 18, 2023, 05:08:28 PM
+The Bitcoin Blockchain can only process around 5 Transactions Per Second (TPS) give or take.
+Prove it. The last article I read some months ago stated that bitcoin can process seven transactions per second. If you have big transactions to make, you can make use of the onchain network.
+
+With lightning network, scalability issue is solved to an extent, but using lightning network for only small transaction amount is advisable.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61937259#msg61937259,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#9,franky1,"March 18, 2023, 08:16:19 PM","Quote from: Charles-Tim on March 18, 2023, 07:51:17 PM
+Quote from: MiliMil on March 18, 2023, 05:08:28 PM
+The Bitcoin Blockchain can only process around 5 Transactions Per Second (TPS) give or take.
+Prove it. The last article I read some months ago stated that bitcoin can process seven transactions per second. If you have big transactions to make, you can make use of the onchain network.
+
+With lightning network, scalability issue is solved to an extent, but using lightning network for only small transaction amount is advisable.
+
+lightning has many scalability issues. they have liquidity problems in regards to routing which only get worse the more popular it gets
+
+as for bitcoins tx/s
+bitcoin does 2016 blocks a fortnight meaning 1 block every 600 seconds average
+bitcoin only does about 2300tx a block
+
+2300/600=3.83per second
+3000tx a block would be 5tx/s
+
+
+the 7tx/s was the ""expectation"" of the old 1mb limit and lean 226byte tx
+but even at todays 4mb blocks it still is not getting much above 5tx/s",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61937369#msg61937369,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#10,MiliMil,"March 19, 2023, 03:33:30 AM","Quote from: OmegaStarScream on March 18, 2023, 05:13:58 PM
+We already have the lightning network, which should be capable of handling way more transactions than Visa does:
+
+https://twitter.com/Blockstream/status/1502115599874359297
+
+I've read that lightning has liquidity issues though?
+If true, that will be a problem as more consumers use the network.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61938685#msg61938685,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#11,MiliMil,"March 19, 2023, 03:37:03 AM","Quote from: franky1 on March 18, 2023, 07:31:50 PM
+someone makes a topic about BITCOIN BLOCKCHAIN
+
+and the usual tribe of alternative network adorers come in and advertise other networks
+
+oh and lightning has a liquidity bottleneck problem that only gets worse the more popular it gets
+
+other alternative networks will come about some that direct bridge to bitcoin and only bitcoin as the ""layer2"" proposition. but some will just be for niche utility. and small value amounts. and others will bridge to multiple mainnets of multiple blockchains.
+
+but lightning is not one that will cope with mass adoption to pay anyone without middlemen
+
+Yes, I was talking about the BTC blockchain specifically.
+Also, ""It is not possible to receive any funds over the Lightning Network without first having secured receiving liquidity from someone else's node"".
+Is this accurate? This seems like a HUGE limitation. Any ideas if this can be remedied?",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61938696#msg61938696,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#12,dzungmobile,"March 19, 2023, 04:22:26 AM","Quote from: MiliMil on March 18, 2023, 05:08:28 PM
+The Bitcoin Blockchain can only process around 5 Transactions Per Second (TPS) give or take.
+When you compare this to VISA which has a TPS rate of 2000+ it seems very low.
+That is a useless comparison.
+
+I don't want to use a payment method with a chargeback option. With VISA, it can be up to 120 days which would be a period I can sleep well.
+
+If you paid with a Visa debit, credit or pre-paid card, a chargeback is an option. If you need to make a chargeback claim, make sure you do it within 120 days of purchase.
+
+With Bitcoin, 3 confirmations are good to go and if it is a transaction with big amount, 6 confirmations are enough for me to be safe. 6 confirmations equal to about 1 hour that is much shorter than 120 days.
+
+Choosing between two options, sleep well after 1 hour and can not sleep well within 120 days. Make your choice!
+
+How many Bitcoin confirmations is enough?",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61938815#msg61938815,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#13,ETFbitcoin,"March 19, 2023, 03:14:13 PM","Quote from: MiliMil on March 19, 2023, 03:37:03 AM
+Quote from: franky1 on March 18, 2023, 07:31:50 PM
+--snip--
+Yes, I was talking about the BTC blockchain specifically.
+
+In that case, usually you're looking for blocksize increase or make Bitcoin transaction structure become more efficient.
+
+Quote from: MiliMil on March 19, 2023, 03:37:03 AM
+Also, ""It is not possible to receive any funds over the Lightning Network without first having secured receiving liquidity from someone else's node"".
+Is this accurate? This seems like a HUGE limitation. Any ideas if this can be remedied?
+
+It depends on configuration of the LN channel. Some light LN wallet usually create LN channel with 0 receiving capacity in order to ignore risks of other party cheating (by releasing older state of LN channel). It can be remidied by using wallet which create LN wallet with specific amount of receiving capacity.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61941318#msg61941318,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#14,Flexystar,"March 19, 2023, 03:33:46 PM","It seems that the community still has got mixed feelings. After so many years and we are still arguing about scalability issues. Like, one says we have low transactions, one says we can use a lightning network while some debate about the liquidity issues in a lightning network. I don't know but this definitely makes me think, bitcoin has not been developed properly nor has the issue been resolved fully.
+
+The VISA, definitely we cant compare them with the bitcoin because let us face it, we are missing that piece of code that will make the original bitcoin faster or at least comparable to it. Let us face it, VISA is good thought their settlement is said to be real-time, the money transferred is netted after hours of time on the server but it works just fine!",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61941409#msg61941409,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#15,PX-Z,"March 19, 2023, 03:50:25 PM","Quote from: MiliMil on March 19, 2023, 03:33:30 AM
+Quote from: OmegaStarScream on March 18, 2023, 05:13:58 PM
+We already have the lightning network, which should be capable of handling way more transactions than Visa does:
+
+https://twitter.com/Blockstream/status/1502115599874359297
+
+I've read that lightning has liquidity issues though?
+If true, that will be a problem as more consumers use the network.
+There is still room for improvement, a possible BIP will be made soon for such kind of scalability issue.
+Comparing bitcoin transaction to VISA's are irrelevant. Wait until most online services uses bitcoin as a form of payment, like what VISA is now.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61941497#msg61941497,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#16,DooMAD,"March 19, 2023, 04:11:38 PM","Quote from: Flexystar on March 19, 2023, 03:33:46 PM
+we are missing that piece of code that will make the original bitcoin faster
+
+It's not just about code, it's about compromise.  Throughput has a cost.  Those who secure the chain have to bear that cost.  They have to store and relay the information contained and updated within the blockchain.  Even at the present rate of throughput, this cost increases all the time.  If you wish to increase throughput it subsequently means increasing the rate at which that cost increases.  If you run a node, you can have a small amount of influence over what level of throughput you are prepared to support.  When most nodes are prepared to support more throughput, then it can increase.     ",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61941601#msg61941601,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#17,franky1,"March 19, 2023, 08:13:41 PM","Quote from: DooMAD on March 19, 2023, 04:11:38 PM
+Quote from: Flexystar on March 19, 2023, 03:33:46 PM
+we are missing that piece of code that will make the original bitcoin faster
+
+It's not just about code, it's about compromise.  Throughput has a cost.  Those who secure the chain have to bear that cost.  They have to store and relay the information contained and updated within the blockchain.  Even at the present rate of throughput, this cost increases all the time.  If you wish to increase throughput it subsequently means increasing the rate at which that cost increases.  If you run a node, you can have a small amount of influence over what level of throughput you are prepared to support.  When most nodes are prepared to support more throughput, then it can increase.      
+
+nodes dont have influence ANYMORE.. thats the point of your favoured ""backward compatibility"" nodes dont need or get to vote anymore. things are pushed through without node mass agreement..
+you have been promoting that feature for a while. so why pretend its the opposite now
+
+you love how core decide without consent. you have been promoting that too how devs shouldnt be told what to do or be censored from doing things they want
+
+you know deep down its core devs that control future decisions not user nodes. they shouldnt have gained that power. but you love that they have
+
+YOU are the guy that doesnt want more transactions but loves the idea of 1 tx having 4mb of bloat in the form of a image file
+
+hey if you think one image file being 4mb in 1 tx is fine for the network.. then please stop crying when others want 4mb of 8000tx, which you cry by saying/suggesting its bad for the network
+
+we are not in the era of 1999 where computers are slow and cannot cope with it.
+its 2023 computers can cope with more then you pretend they can
+
+if you truly think 4mb of genuine utility of thousands of transactions(packets of data) is bad. then how come many many other data services to clients of different serves do not have a problem.. EG online gaming. livestreaming, torrents
+
+i do laugh how you want blocks to have 1tx of 4mb but dont want 4mb of 8000tx
+
+users dont have the choice because the only main dev of protocol level coding is core. thus everyone is WAITING and begging for CORE to allow more transaction count, becasue any other brand trying to do it will get REKT. and core as you know have a roadmap of wanting to push people off the network into other networks(you favour) as their plan.. and as you keep saying for the last 6 years ""be patient"" yet all of these topics over the years made by thousands of people wanting transaction scaling on bitcoin shows its not just a minority asking for more tx count onchain
+
+stop pretending its user decision or user fault for no upgrades.. core have become the only party offering ability to upgrade and yet they are not offering the upgrades the people want and only offering upgrades corporations want(gateway formats to lock people into other networks for middlemen rewarding of facilitating payments)",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61942743#msg61942743,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#18,DooMAD,"March 19, 2023, 09:55:38 PM","Quote from: franky1 on March 19, 2023, 08:13:41 PM
+nodes dont have influence ANYMORE.. thats the point of your favoured ""backward compatibility"" nodes dont need or get to vote anymore. things are pushed through without node mass agreement..
+you have been promoting that feature for a while. so why pretend its the opposite now
+
+Why don't you softfork a blocksize increase, then?  Troll.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61943162#msg61943162,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#19,Cuenta Alternativa,"March 20, 2023, 04:59:19 AM","I am not concerned about the number of transactions. I think the current one is fine for use as a store of value. Whether mass use as a currency is given as a second layer solution and whether those solutions are more centralised or not is another matter.
+
+I don't think bitcoin will ever come close to exterminating the rest of the fiat currencies and shitty altcoins, so it is normal that it will coexist at least for daily payments with these worse currencies and that people will prefer to use them, holding bitcoin over time.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61944434#msg61944434,https://bitcointalk.org/index.php?topic=5445412.0
+https://bitcointalk.org/index.php?topic=5445412.0#20,MiliMil,"March 20, 2023, 08:47:16 AM","Quote from: ETFbitcoin on March 19, 2023, 03:14:13 PM
+
+It depends on configuration of the LN channel. Some light LN wallet usually create LN channel with 0 receiving capacity in order to ignore risks of other party cheating (by releasing older state of LN channel). It can be remidied by using wallet which create LN wallet which specific amount of receiving capacity.
+
+Thank you.",Re: Bitcoin Blockchain Transactions Per Second,https://bitcointalk.org/index.php?topic=5445412.msg61945248#msg61945248,https://bitcointalk.org/index.php?topic=5445412.0

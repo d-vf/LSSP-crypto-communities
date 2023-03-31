@@ -1,0 +1,604 @@
+PostID,Username,PostDate,PostContent,PostTitle,PostURL,URL_Source
+https://bitcointalk.org/index.php?topic=5428062.0#1,achow101,"December 12, 2022, 03:24:29 PM","24.0.1 Release Notes
+
+Due to last-minute issues (#26616), 24.0, although tagged, was never fully
+announced or released.
+
+Bitcoin Core version 24.0.1 is now available from:
+
+https://bitcoincore.org/bin/bitcoin-core-24.0.1/
+
+This release includes new features, various bug fixes and performance
+improvements, as well as updated translations.
+
+Please report bugs using the issue tracker at GitHub:
+
+https://github.com/bitcoin/bitcoin/issues
+
+To receive security and update notifications, please subscribe to:
+
+https://bitcoincore.org/en/list/announcements/join/
+
+How to Upgrade
+
+If you are running an older version, shut it down. Wait until it has completely
+shut down (which might take a few minutes in some cases), then run the
+installer (on Windows) or just copy over /Applications/Bitcoin-Qt (on macOS)
+or bitcoind/bitcoin-qt (on Linux).
+
+Upgrading directly from a version of Bitcoin Core that has reached its EOL is
+possible, but it might take some time if the data directory needs to be migrated. Old
+wallet versions of Bitcoin Core are generally supported.
+
+Compatibility
+
+Bitcoin Core is supported and extensively tested on operating systems
+using the Linux kernel, macOS 10.15+, and Windows 7 and newer.  Bitcoin
+Core should also work on most other Unix-like systems but is not as
+frequently tested on them.  It is not recommended to use Bitcoin Core on
+unsupported systems.
+
+Notice of new option for transaction replacement policies
+
+This version of Bitcoin Core adds a new mempoolfullrbf configuration
+option which allows users to change the policy their individual node
+will use for relaying and mining unconfirmed transactions.  The option
+defaults to the same policy that was used in previous releases and no
+changes to node policy will occur if everyone uses the default.
+
+Some Bitcoin services today expect that the first version of an
+unconfirmed transaction that they see will be the version of the
+transaction that ultimately gets confirmed---a transaction acceptance
+policy sometimes called ""first-seen"".
+
+The Bitcoin Protocol does not, and cannot, provide any assurance that
+the first version of an unconfirmed transaction seen by a particular
+node will be the version that gets confirmed.  If there are multiple
+versions of the same unconfirmed transaction available, only the miner
+who includes one of those transactions in a block gets to decide which
+version of the transaction gets confirmed.
+
+Despite this lack of assurance, multiple merchants and services today
+still make this assumption.
+
+There are several benefits to users from removing this first-seen
+simplification.  One key benefit, the ability for the sender of a
+transaction to replace it with an alternative version paying higher
+fees, was realized in Bitcoin Core 0.12.0 (February 2016) with the
+introduction of BIP125 opt-in Replace By Fee (RBF).
+
+Since then, there has been discussion about completely removing the
+first-seen simplification and allowing users to replace any of their
+older unconfirmed transactions with newer transactions, a feature called
+full-RBF.  This release includes a mempoolfullrbf configuration
+option that allows enabling full-RBF, although it defaults to off
+(allowing only opt-in RBF).
+
+Several alternative node implementations have already enabled full-RBF by
+default for years, and several contributors to Bitcoin Core are
+advocating for enabling full-RBF by default in a future version of
+Bitcoin Core.
+
+As more nodes that participate in relay and mining begin enabling
+full-RBF, replacement of unconfirmed transactions by ones offering higher
+fees may rapidly become more reliable.
+
+Contributors to this project strongly recommend that merchants and services
+not accept unconfirmed transactions as final, and if they insist on doing so,
+to take the appropriate steps to ensure they have some recourse or plan for
+when their assumptions do not hold.
+
+Notable changes
+
+P2P and network changes
+To address a potential denial-of-service, the logic to download headers from peers
+has been reworked.  This is particularly relevant for nodes starting up for the
+first time (or for nodes which are starting up after being offline for a long time).
+
+Whenever headers are received from a peer that have a total chainwork that is either
+less than the node's -minimumchainwork value or is sufficiently below the work at
+the node's tip, a ""presync"" phase will begin, in which the node will download the
+peer's headers and verify the cumulative work on the peer's chain, prior to storing
+those headers permanently. Once that cumulative work is verified to be sufficiently high,
+the headers will be redownloaded from that peer and fully validated and stored.
+
+This may result in initial headers sync taking longer for new nodes starting up for
+the first time, both because the headers will be downloaded twice, and because the effect
+of a peer disconnecting during the presync phase (or while the node's best headers chain has less
+than -minimumchainwork), will result in the node needing to use the headers presync mechanism
+with the next peer as well (downloading the headers twice, again). (#25717)
+With I2P connections, a new, transient address is used for each outbound
+connection if -i2pacceptincoming=0. (#25355)
+
+Updated RPCs
+The -deprecatedrpc=softforks configuration option has been removed.  The
+RPC getblockchaininfo no longer returns the softforks field, which was
+previously deprecated in 23.0. (#23508) Information on soft fork status is
+now only available via the getdeploymentinfo RPC.
+The deprecatedrpc=exclude_coinbase configuration option has been removed.
+The receivedby RPCs (listreceivedbyaddress, listreceivedbylabel,
+getreceivedbyaddress and getreceivedbylabel) now always return results
+accounting for received coins from coinbase outputs, without an option to
+change that behaviour. Excluding coinbases was previously deprecated in 23.0.
+(#25171)
+The deprecatedrpc=fees configuration option has been removed. The top-level
+fee fields fee, modifiedfee, ancestorfees and descendantfees are no
+longer returned by RPCs getmempoolentry, getrawmempool(verbose=true),
+getmempoolancestors(verbose=true) and getmempooldescendants(verbose=true).
+The same fee fields can be accessed through the fees object in the result.
+The top-level fee fields were previously deprecated in 23.0. (#25204)
+The getpeerinfo RPC has been updated with a new presynced_headers field,
+indicating the progress on the presync phase mentioned in the
+""P2P and network changes"" section above.
+
+Changes to wallet related RPCs can be found in the Wallet section below.
+
+New RPCs
+The sendall RPC spends specific UTXOs to one or more recipients
+without creating change. By default, the sendall RPC will spend
+every UTXO in the wallet. sendall is useful to empty wallets or to
+create a changeless payment from select UTXOs. When creating a payment
+from a specific amount for which the recipient incurs the transaction
+fee, continue to use the subtractfeefromamount option via the
+send, sendtoaddress, or sendmany RPCs. (#24118)
+A new gettxspendingprevout RPC has been added, which scans the mempool to find
+transactions spending any of the given outpoints. (#24408)
+The simulaterawtransaction RPC iterates over the inputs and outputs of the given
+transactions, and tallies up the balance change for the given wallet. This can be
+useful e.g. when verifying that a coin join like transaction doesn't contain unexpected
+inputs that the wallet will then sign for unintentionally. (#22751)
+
+Updated REST APIs
+The /headers/ and /blockfilterheaders/ endpoints have been updated to use
+a query parameter instead of path parameter to specify the result count. The
+count parameter is now optional, and defaults to 5 for both endpoints. The old
+endpoints are still functional, and have no documented behaviour change.
+
+For /headers, use
+GET /rest/headers/<BLOCK-HASH>.<bin|hex|json>?count=<COUNT=5>
+instead of
+GET /rest/headers/<COUNT>/<BLOCK-HASH>.<bin|hex|json> (deprecated)
+
+For /blockfilterheaders/, use
+GET /rest/blockfilterheaders/<FILTERTYPE>/<BLOCK-HASH>.<bin|hex|json>?count=<COUNT=5>
+instead of
+GET /rest/blockfilterheaders/<FILTERTYPE>/<COUNT>/<BLOCK-HASH>.<bin|hex|json> (deprecated)
+
+(#24098)
+
+Build System
+Guix builds are now reproducible across architectures (x86_64 &amp; aarch64). (#21194)
+
+New settings
+A new mempoolfullrbf option has been added, which enables the mempool to
+accept transaction replacement without enforcing BIP125 replaceability
+signaling. (#25353)
+
+Wallet
+The -walletrbf startup option will now default to true. The
+wallet will now default to opt-in RBF on transactions that it creates. (#25610)
+The replaceable option for the createrawtransaction and
+createpsbt RPCs will now default to true. Transactions created
+with these RPCs will default to having opt-in RBF enabled. (#25610)
+The wsh() output descriptor was extended with Miniscript support. You can import Miniscript
+descriptors for P2WSH in a watchonly wallet to track coins, but you can't spend from them using
+the Bitcoin Core wallet yet.
+You can find more about Miniscript on the reference website. (#24148)
+The tr() output descriptor now supports multisig scripts through the multi_a() and
+sortedmulti_a() functions. (#24043)
+To help prevent fingerprinting transactions created by the Bitcoin Core wallet, change output
+amounts are now randomized. (#24494)
+The listtransactions, gettransaction, and listsinceblock
+RPC methods now include a wtxid field (hash of serialized transaction,
+including witness data) for each transaction. (#24198)
+The listsinceblock, listtransactions and gettransaction output now contain a new
+parent_descs field for every ""receive"" entry. (#25504)
+A new optional include_change parameter was added to the listsinceblock command.
+RPC getreceivedbylabel now returns an error, ""Label not found
+in wallet"" (-4), if the label is not in the address book. (#25122)
+
+Migrating Legacy Wallets to Descriptor Wallets
+
+An experimental RPC migratewallet has been added to migrate Legacy (non-descriptor) wallets to
+Descriptor wallets. More information about the migration process is available in the
+documentation.
+
+GUI changes
+A new menu item to restore a wallet from a backup file has been added (gui#471).
+Configuration changes made in the bitcoin GUI (such as the pruning setting,
+proxy settings, UPNP preferences) are now saved to <datadir>/settings.json
+file rather than to the Qt settings backend (windows registry or unix desktop
+config files), so these settings will now apply to bitcoind, instead of being
+ignored. (#15936, gui#602)
+Also, the interaction between GUI settings and bitcoin.conf settings is
+simplified. Settings from bitcoin.conf are now displayed normally in the GUI
+settings dialog, instead of in a separate warning message (""Options set in this
+dialog are overridden by the configuration file: -setting=value""). And these
+settings can now be edited because settings.json values take precedence over
+bitcoin.conf values. (#15936)
+
+Low-level changes
+
+RPC
+The deriveaddresses, getdescriptorinfo, importdescriptors and scantxoutset commands now
+accept Miniscript expression within a wsh() descriptor. (#24148)
+The getaddressinfo, decodescript, listdescriptors and listunspent commands may now output
+a Miniscript descriptor inside a wsh() where a wsh(raw()) descriptor was previously returned. (#24148)
+
+Credits
+
+Thanks to everyone who directly contributed to this release:
+/dev/fd0
+0xb10c
+Adam Jonas
+akankshakashyap
+Ali Sherief
+amadeuszpawlik
+Andreas Kouloumos
+Andrew Chow
+Anthony Towns
+Antoine Poinsot
+Antoine Riard
+Aurèle Oulès
+avirgovi
+Ayush Sharma
+Baas
+Ben Woosley
+BrokenProgrammer
+brunoerg
+brydinh
+Bushstar
+Calvin Kim
+CAnon
+Carl Dong
+chinggg
+Cory Fields
+Daniel Kraft
+Daniela Brozzoni
+darosior
+Dave Scotese
+David Bakin
+dergoegge
+dhruv
+Dimitri
+dontbyte
+Duncan Dean
+eugene
+Eunoia
+Fabian Jahr
+furszy
+Gleb Naumenko
+glozow
+Greg Weber
+Gregory Sanders
+gruve-p
+Hennadii Stepanov
+hiago
+Igor Bubelov
+ishaanam
+Jacob P.
+Jadi
+James O'Beirne
+Janna
+Jarol Rodriguez
+Jeremy Rand
+Jeremy Rubin
+jessebarton
+João Barbosa
+John Newbery
+Jon Atack
+Josiah Baker
+Karl-Johan Alm
+KevinMusgrave
+Kiminuo
+klementtan
+Kolby Moroz
+kouloumos
+Kristaps Kaupe
+Larry Ruane
+Luke Dashjr
+MarcoFalke
+Marnix
+Martin Leitner-Ankerl
+Martin Zumsande
+Michael Dietz
+Michael Folkson
+Michael Ford
+Murch
+mutatrum
+muxator
+Oskar Mendel
+Pablo Greco
+pasta
+Patrick Strateman
+Pavol Rusnak
+Peter Bushnell
+phyBrackets
+Pieter Wuille
+practicalswift
+randymcmillan
+Robert Spigler
+Russell Yanofsky
+S3RK
+Samer Afach
+Sebastian Falbesoner
+Seibart Nedor
+Shashwat
+Sjors Provoost
+Smlep
+sogoagain
+Stacie
+Stéphan Vuylsteke
+Suhail Saqan
+Suhas Daftuar
+t-bast
+TakeshiMusgrave
+Vasil Dimov
+W. J. van der Laan
+w0xlt
+whiteh0rse
+willcl-ark
+William Casarin
+Yancy Ribbens
+
+As well as to everyone that helped with translations on
+Transifex.",Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61432320#msg61432320,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#,,,,,https://bitcointalk.org/index.php?topic=1680232337.msg1680232337#msg1680232337,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#2,Artemis3,"December 12, 2022, 04:22:16 PM",Why is 23.0 still pinned?,Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61432586#msg61432586,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#3,NotATether,"December 13, 2022, 05:50:35 PM","What exactly were the security issues that you found in 24.0 at the last minute?
+
+Asking because I'm running a 24.0 node at the moment <well, ever since that was released really>",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61437842#msg61437842,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#4,achow101,"December 13, 2022, 06:15:41 PM","Quote from: Artemis3 on December 12, 2022, 04:22:16 PM
+Why is 23.0 still pinned?
+
+Only moderators of ""Bitcoin Discussion"" and forum admins can sticky topics here. I am not one of them.
+
+Quote from: NotATether on December 13, 2022, 05:50:35 PM
+What exactly were the security issues that you found in 24.0 at the last minute?
+
+Asking because I'm running a 24.0 node at the moment <well, ever since that was released really>
+There was a crashing bug in MacOS 13, a bug in the wallet that would either crash or create an incorrect transaction depending on some details for that transaction, and a p2p issue with relaying transactions too soon.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61437963#msg61437963,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#5,S_Speche,"December 15, 2022, 04:54:26 PM","Do not download Bitcoin Core V24.0.1
+
+
+It contains the  malicious Full-RBF code.
+
+
+#NoFullRBF",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61448138#msg61448138,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#6,NotATether,"December 15, 2022, 05:48:15 PM","Quote from: S_Speche on December 15, 2022, 04:54:26 PM
+
+
+Do not download Bitcoin Core V24.0.1
+
+
+It contains the  malicious Full-RBF code.
+
+
+#NoFullRBF
+
+Wut? FullRBF is disabled by default and you have to go out of your way to manually enable it via a config switch or command line option.
+
+If you don't like the feature, just fork Bitcoin again. There is nothing any of us can do to reverse course. This is the decentralized consensus after all.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61448385#msg61448385,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#7,ETFbitcoin,"December 16, 2022, 08:50:31 AM","Quote from: NotATether on December 15, 2022, 05:48:15 PM
+If you don't like the feature, just fork Bitcoin again. There is nothing any of us can do to reverse course. This is the decentralized consensus after all.
+
+Forking isn't even necessary since you could just use older Bitcoin Core or different full node software (such as bcoin or gocoin).",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61451256#msg61451256,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#8,kano,"December 16, 2022, 10:11:59 AM","Well, the only question I have is who voted for Full-RBF? ... since it is available now and on the road map to go on by default soon.
+Or was it just 'core' decided again?",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61451551#msg61451551,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#9,pooya87,"December 16, 2022, 11:17:53 AM","Quote from: NotATether on December 15, 2022, 05:48:15 PM
+If you don't like the feature, just fork Bitcoin again. There is nothing any of us can do to reverse course. This is the decentralized consensus after all.
+This is misleading because RBF is not a consensus rule to need any kind of fork to change. It is part of the standard rules which is how nodes treat the transactions they receive in their mempool. Kind of like fees.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61451780#msg61451780,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#10,S_Speche,"December 16, 2022, 09:45:32 PM","Quote from: NotATether on December 15, 2022, 05:48:15 PM
+
+
+Wut? FullRBF is disabled by default and you have to go out of your way to manually enable it via a config switch or command line option.
+
+If you don't like the feature, just fork Bitcoin again. There is nothing any of us can do to reverse course. This is the decentralized consensus after all.
+
+As other users have commented, A Fork is not a proper solution for this attack.  
+
+Consensus was broken when Core devs decided to go against Bitcoin´s White Paper:   For our purposes, the earliest transaction is the one that counts, so we don't care about later attempts to double-spend.  
+
+Each Attack is an opportunity for Bitcoin and bitcoiners to gain self awareness, this is a perfect example as self awareness is the only posible solution. We need better Bitcoin education.
+
+
+First I'll post my arguments against Full-RBF and then I'll propose a solution:
+
+
+Full-RBF was deliberately included on Core V24.0 without reaching consensus.
+
+It opens a door to centralization under Blockstream: Bitcoin is not Lightning. Lighting is a L2 solution for scalability of micropayments. Bitcoin L1 is the truly secure, high value layer.
+
+Full-RBF solves NO problem: RBF already existed, there was no reason for Full-RBF to be deployed.
+
+Full-RBF enables ANY transaction to be double spendable, any honest transaction could be replaced by a malicious higher fee one. This could result in censorship, seizure of funds by an state actor or theft.
+For understanding this last argument I´ll explain one of Bitcoins limitations which should be publicly known if we believe in self custody:
+
+Because of how Bitcoin's cryptography works, You'll not find substantial attack worthy unspent UTXO. This is because whales know that any pvt key gets easier to extract through brute force if you already use it to sign a transaction.
+Any system has its limitations and Bitcoin is not the exception. However Bitcoin has been doing great so far with its own.
+
+Any transaction awaiting in the mempool is vulnerable due to this same reason.  This is why the first seen rule was included on Bitcoin's white paper.
+
+If a state agent is able to extract a PVT key from a transacción on the mempool in less than 10 minutes on 2022, or in X years from now is not an argument. Full-RBF is opening the back door towards censorship and seizure of Bitcoin's transactions.  
+
+
+
+
+Now I'll share with you my suggested solution for this attack. It's a multi layer solution and strong community support is required. But bitcoiners are strong, and Bitcoin will came out stronger than ever:
+
+
+Social Layer:
+
+Any Bitcoiner that cares for Bitcoin to remain being Bitcoin, and to continue its path towards the wolrd's store of value, must share their disagreement with Core's breach of consensus. I suggest the hashtag #NoFullRBF on every Bitcoin related publication.
+A campaign for the quick removal of all links to the V24.0 and V24.0.1 Core versions from this and all other sites.
+A strong educational campaign and continuing program on UTXOs, PVT and Public key's limitations and inner mechanics. Best practices for self custody, unexpended transactions vulnerabilities, etc.  
+
+
+
+Core Dev Layer:
+
+Core must work in a Non Full-RBF V25 client to be released as soon as posible.
+
+Bitcoin Core must remove all links to their malicious  Full-RBF code as soon as possible.  
+
+Any Dev incapable of summarize, or being concise and clear on their argumentation for Full-RBF must be ignored. It´s a common attack tactic on social layers, to write long speeches with unintelligible language for others to feel dumb. Don't you fall for this tactic. Also personal attacks must be contained from these discussions. I'll take part if it is necessary.
+
+
+
+Full-RBF Nodes Monitor Team
+
+We need a new Dev team in charge of creating the tools for Bitcoin's community to be able to follow the number of nodes running Full-RBF in real time. A team Operational for the rest of Bitcoin's History. (Thanks Peter Todd) As the number of Full-RBF Attacker Nodes must never go over 10% of the total node count.
+
+
+
+Protocol Layer
+
+In case we are unable to contain attacker nodes under 10% we will need to adapt the Timechain. I propose a 5 minute block time with all the necessary adjustments for the monetary policy to remain unchanged. This has profound ramifications in terms of orphan Blocks because of networks latency, propagation and reaction times which needs to be studied further. This is a scenario I prefer to avoid.  
+
+
+
+
+
+#NoFullRBF
+
+Do not download Bitcoin Core V24
+
+If your are running V24 Uninstall immediately!
+
+Security must not be compromised in favor of UX, Scalability, or any other reason unrelated to Bitcoin's value itself.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61454497#msg61454497,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#11,pooya87,"December 17, 2022, 09:46:13 AM","Quote from: S_Speche on December 16, 2022, 09:45:32 PM
+Consensus was broken when Core devs decided to go against Bitcoin´s White Paper:   For our purposes, the earliest transaction is the one that counts, so we don't care about later attempts to double-spend. 
+Unconfirmed transactions have never been safe ever. With or without RBF this fact is not changing and what you insist on calling ""attack"" is not a thing.
+
+Quote
+Full-RBF was deliberately included on Core V24.0 without reaching consensus.
+Options that have nothing to do with the consensus rules do not need to reach any kind of consensus.
+
+Quote
+It opens a door to centralization under Blockstream: Bitcoin is not Lightning. Lighting is a L2 solution for scalability of micropayments. Bitcoin L1 is the truly secure, high value layer.
+Nonsense.
+
+Quote
+Full-RBF solves NO problem: RBF already existed, there was no reason for Full-RBF to be deployed.
+Full-RBF enables ANY transaction to be double spendable,
+I agree with this part. Specifically since we have CPFP option.
+
+Quote
+any honest transaction could be replaced by a malicious higher fee one. This could result in censorship, seizure of funds by an state actor or theft.
+Complete nonsense.
+Sender is in control of their keys so nobody can censor or seize their funds. The receiver also is not in the possession of the unconfirmed transaction so there is nothing there to censor or seize either. After the confirmation there is still no way to censor or seize the coins that are in their possession since they would control the key.
+
+Quote
+Because of how Bitcoin's cryptography works, You'll not find substantial attack worthy unspent UTXO. This is because whales know that any pvt key gets easier to extract through brute force if you already use it to sign a transaction.
+Complete nonsense.
+There is no way to ""brute force"" any private key by having the signature, one signature or a million doesn't change that.
+
+Quote
+Any transaction awaiting in the mempool is vulnerable due to this same reason.  This is why the first seen rule was included on Bitcoin's white paper.
+Complete nonsense. You either didn't read bitcoin's white paper or misunderstood it all, don't just read point #2, continue reading #3 and #4. That is how bitcoin works (confirmed transactions in blocks protected by Poof of Work) not by unconfirmed txs in the mempool based on which one was seen first, in fact this last part is the flaw that Satoshi is pointing out in other systems that bitcoin solves with PoW.
+
+Quote
+If a state agent is able to extract a PVT key from a transacción on the mempool in less than 10 minutes on 2022, or in X years from now is not an argument. Full-RBF is opening the back door towards censorship and seizure of Bitcoin's transactions. 
+If that becomes a possibility, the same imaginary ""state agent"" would also mine the block containing the double spent transaction without needing Full-RBF",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61456483#msg61456483,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#12,NotATether,"December 21, 2022, 01:16:14 PM","Quote from: S_Speche on December 16, 2022, 09:45:32 PM
+First I'll post my arguments against Full-RBF and then I'll propose a solution:
+
+
+Full-RBF was deliberately included on Core V24.0 without reaching consensus.
+
+It opens a door to centralization under Blockstream: Bitcoin is not Lightning. Lighting is a L2 solution for scalability of micropayments. Bitcoin L1 is the truly secure, high value layer.
+
+Full-RBF solves NO problem: RBF already existed, there was no reason for Full-RBF to be deployed.
+
+Full-RBF enables ANY transaction to be double spendable, any honest transaction could be replaced by a malicious higher fee one. This could result in censorship, seizure of funds by an state actor or theft.
+For understanding this last argument I´ll explain one of Bitcoins limitations which should be publicly known if we believe in self custody:
+
+Because of how Bitcoin's cryptography works, You'll not find substantial attack worthy unspent UTXO. This is because whales know that any pvt key gets easier to extract through brute force if you already use it to sign a transaction.
+Any system has its limitations and Bitcoin is not the exception. However Bitcoin has been doing great so far with its own.
+
+Any transaction awaiting in the mempool is vulnerable due to this same reason.  This is why the first seen rule was included on Bitcoin's white paper.
+
+If a state agent is able to extract a PVT key from a transacción on the mempool in less than 10 minutes on 2022, or in X years from now is not an argument. Full-RBF is opening the back door towards censorship and seizure of Bitcoin's transactions.  
+
+~
+
+You raise some good points here, particularly the ""full-RBF enables any transaction to be double spendable"" part, but you'd need to have access to the private key in order to replace an RBF transaction, so you'd have to be the original owner of the key anyway.
+
+(For the record, I don't consider the argument said by other people that zero-conf transactions are essential to some businesses - all on-chain transactions start off as zero-conf anyway. But this one that you suggested is an interesting scenario.)
+
+Are there people who actively rely on non-RBF transactions to prevent entities such state actors from diverting their transaction? So far, I haven't heard of any instances myself.
+
+I think people would be more convinced of any potential dangers if someone engineered an demonstration of extracting a wallet.dat password through some side-channel attack, followed by replacing some existing RBF transaction by another one. Perhaps bumping from 1sat/byte to 2sats/byte to give enough time for experiment setup.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61476670#msg61476670,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#13,BlackHatCoiner,"December 25, 2022, 01:47:09 PM","Quote from: S_Speche on December 16, 2022, 09:45:32 PM
+Full-RBF was deliberately included on Core V24.0 without reaching consensus.
+Which is something you don't understand yourself? There's no consensus for local settings. You are and always were free to treat non-RBF as RBF since v0.1, and in fact there's no way for the rest of the nodes to even know you're doing it. It's just now a setting instead of a hardcoded value. You're free to have it disabled, and if there weren't already nodes who did this, it's likely that there won't be now either.
+
+Also, do not derail this thread. Continue here: Full RBF.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61495404#msg61495404,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#14,pi5hxaeb,"December 28, 2022, 05:25:30 AM","After reading a great recap on the matter, I just activated Full RBF on Core 24.0.1 (by adding mempoolfullrbf=1 to bitcoin.conf)
+
+Does anyone know of any command for bitcoind to check whether the Full RBF option is enabled? I just want to get confirmation.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61508369#msg61508369,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#15,vv181,"December 28, 2022, 07:54:58 PM","Quote from: pi5hxaeb on December 28, 2022, 05:25:30 AM
+Does anyone know of any command for bitcoind to check whether the Full RBF option is enabled? I just want to get confirmation.
+
+Use $ bitcoin-cli getmempoolinfo
+
+Code:
+$ bitcoin-cli getmempoolinfo
+{
+~
+  ""fullrbf"": true
+}",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61511343#msg61511343,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#16,MysteryMiner,"January 02, 2023, 08:47:23 PM","There was 24.0.1 version and newer version is 22.1 and guess what, newest version is 23.1
+
+These incompetent soy milk drinking wannabe programmers cannot get even the version numbers straight. For a person who was around Bitcoin from early months but now is not too involved in Bitcoin cannot get the software right. Some older machines I own require update because they get alert for unknown rules activated. But I simply cannot trust software that is released by persons who cannot get version numbers right, change domain names and code signing certificates. The race to increase major version number like Firefox and Chrome does tells about quality of them as developers.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61534449#msg61534449,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#17,achow101,"January 03, 2023, 12:52:20 AM","Quote from: MysteryMiner on January 02, 2023, 08:47:23 PM
+There was 24.0.1 version and newer version is 22.1 and guess what, newest version is 23.1
+
+These incompetent soy milk drinking wannabe programmers cannot get even the version numbers straight. For a person who was around Bitcoin from early months but now is not too involved in Bitcoin cannot get the software right. Some older machines I own require update because they get alert for unknown rules activated. But I simply cannot trust software that is released by persons who cannot get version numbers right, change domain names and code signing certificates.
+22.1 and 23.1 are bug fix releases for the previous major versions of 22.0 and 23.0. They contain bug and security fixes that were backported on top of older versions. The purpose of such releases is to allow people to still safely use older versions. Users may still wish to do so because they may still be auditing newer versions, or newer versions contain features that they are not yet comfortable with, or maybe something was deprecated and removed that they are still relying on. In these releases, very little has changed except for some bug fixes that were deemed to be important.
+
+Minor releases has nothing to do with ""soy milk drinking wannabe programmers cannot get even the version numbers straight"". It is, in fact, a standard procedure that we do, and is a common practice in the software development industry. Just as an example, the Linux kernel is currently 6.1.2. But there are still releases for 5.x and 4.x kernel versions because they support older major versions. They make bug fix backports to the older versions so that users who wish to still use those older versions are not left out to dry if there are important bugs that are found. This is what Bitcoin Core does as well.
+
+Quote from: MysteryMiner on January 02, 2023, 08:47:23 PM
+The race to increase major version number like Firefox and Chrome does tells about quality of them as developers.
+There is no such race, and never has been. The major version number has been incremented periodically, every 6 months or so. That's been the release cadence for the past decade (more than that, actually), and so it's natural that the version number has reached 24 already. Nothing to do with ""race to increase major version"". This would be plainly obvious if you just look at the release history of the software.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61535215#msg61535215,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#18,MysteryMiner,"January 03, 2023, 01:09:53 AM","Quote
+22.1 and 23.1 are bug fix releases for the previous major versions of 22.0 and 23.0. They contain bug and security fixes that were backported on top of older versions. The purpose of such releases is to allow people to still safely use older versions. Users may still wish to do so because they may still be auditing newer versions, or newer versions contain features that they are not yet comfortable with, or maybe something was deprecated and removed that they are still relying on. In these releases, very little has changed except for some bug fixes that were deemed to be important.
+It was never done such for Bitcoin. So the there is real base for concerns some users about full RBF feature that developers decided to basically continue to work on older releases?
+
+Quote
+Minor releases has nothing to do with ""soy milk drinking wannabe programmers cannot get even the version numbers straight"". It is, in fact, a standard procedure that we do, and is a common practice in the software development industry.
+Standard practice was to release 2.0 version after 1.x is abandoned and in Visual C++ 6.0 New Project menu is selected. I remember Bitcoin always had 0.xx.x versioning schema until someone dropped zero from front and we arrived from pre-1.0 versions to version 22 overnight. If this is not Firefox then what? Also some Intel fanboys decided to rename Bitcoin to Bitcoin Core. And do not tell that Bitcoin and Bitcoin are two different things. The reference implementation of Bitcoin De Facto are Bitcoin. Just like when we are talking about DC++ there is no need to separate DC++ protocol from DC++ client, even if the protocol is compatible with other clients like RevConnect or StrongDC++.
+
+Quote
+Just as an example, the Linux kernel is currently 6.1.2. But there are still releases for 5.x and 4.x kernel versions because they support older major versions. They make bug fix backports to the older versions so that users who wish to still use those older versions are not left out to dry if there are important bugs that are found.
+If I want to run 2.4 or 2.6 Linux kernel versions, I take out old Slackware or Mandrake CD-ROMs and run them. Also Linux stayed on 2.4 and 2.6 kernel versions for long time. I do not remember 2.8 versions, but probably because I mostly work with embedded systems now. Even Linux kernel development now is infested with soy drinking transvestites messing up version numbers.
+
+So where we are now? What is the bestest Bitcoin version?",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61535238#msg61535238,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#19,achow101,"January 03, 2023, 03:15:43 AM","Quote from: MysteryMiner on January 03, 2023, 01:09:53 AM
+It was never done such for Bitcoin.
+Are you daft? Look at the list of releases: https://bitcoincore.org/en/releases/. You see all those 0.x.1, 0.x.2, and 0.x.3 releases? Those are minor releases, in the same way 22.1 and 23.1 are minor releases.
+
+Quote from: MysteryMiner on January 03, 2023, 01:09:53 AM
+So the there is real base for concerns some users about full RBF feature that developers decided to basically continue to work on older releases?
+No, there is no such concern. There were already plans to do 22.1 and 23.1 before that controversy started.
+
+Quote from: MysteryMiner on January 03, 2023, 01:09:53 AM
+Standard practice was to release 2.0 version after 1.x is abandoned
+A lot of projects maintain older major versions. Like the Linux kernel as I mentioned.
+
+Quote from: MysteryMiner on January 03, 2023, 01:09:53 AM
+I remember Bitcoin always had 0.xx.x versioning schema until someone dropped zero from front and we arrived from pre-1.0 versions to version 22 overnight. If this is not Firefox then what?
+It was dropped because the 0 wasn't doing anything useful. 0.x releases were referred to as major releases and the x the major version number. The change was to make those two concepts align. It has nothing to do with trying to inflate version numbers. No one gives a shit about that.
+
+Quote from: MysteryMiner on January 03, 2023, 01:09:53 AM
+-snip-
+At this point, I think you're just trolling. Hurling insults as you are is completely unhelpful. So I will be deleting any further posts from you in this thread.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61535442#msg61535442,https://bitcointalk.org/index.php?topic=5428062.0
+https://bitcointalk.org/index.php?topic=5428062.0#20,Carlton Banks,"January 04, 2023, 06:26:02 PM","Quote from: achow101 on January 03, 2023, 03:15:43 AM
+Quote from: MysteryMiner on January 03, 2023, 01:09:53 AM
+It was never done such for Bitcoin.
+Are you daft?
+
+no need for a question mark, and you also misplaced the position of the words 'you' and 'are' in the sentence. Strange, as your english language skills are always very good achow101!
+
+belated congrats on the new release everyone.",Re: Bitcoin Core 24.0.1 Released,https://bitcointalk.org/index.php?topic=5428062.msg61544248#msg61544248,https://bitcointalk.org/index.php?topic=5428062.0
