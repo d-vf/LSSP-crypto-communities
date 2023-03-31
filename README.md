@@ -7,16 +7,20 @@
    * for "board" 1 (https://bitcointalk.org/index.php?board=1.0')
    * outpur: bitcointalk_data.csv
 - 2. Gets all replies for each post (author, date, content, title, ID and url)
-   * bitcointalk_posts.py
+   * get_post_from_list.py
    * uses the list from 1 and gets all post (+ all nav pages) and store id, post, title, date and url
-   * output: bitcointalk_forum_data.csv
+   * output folder: output_data/ (each topic)
+ 
 
 To do:
-approx 60000, that with timeout=10 would need aprox 13,3 days to get all - breaking list and running in // 
+approx 60000, that with 1  422.78 seconds per request would need more than 1 week to get all.
+
 E.g 
 
 Processed 7794 posts from https://bitcointalk.org/index.php?topic=20333.0 in 422.78 seconds.
 Processed 10 posts from https://bitcointalk.org/index.php?topic=1649348.0 in 1.84 seconds.
+
+* breaking list and running in // 
 
 ## Cypherpunk mailing list
 
