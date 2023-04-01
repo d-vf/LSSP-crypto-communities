@@ -35,7 +35,7 @@ https://zenodo.org/record/7765080#.ZBzhmOzMKcs
 
 To do:
 
-- fixing timedares (different TZ); almost all (0.1%)
-- Checking duplicates
-- regular expression
+- <strike>fixing timedares (different TZ); almost all (0.1%)</strike>
+- <strike>Checking duplicates</strike>
+- <strike>regular expression</strike>
 - spam filter
