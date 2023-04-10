@@ -25,6 +25,13 @@ E.g
 
 * breaking list and running in // 
 
+Run multiprocess (calling process_1.py)
+For AWS (multiprocerss (calling process_1_aws.py)
+
+Check folders (last request to ajust list)
+
+change: path, '/usr/bin/python3', check google drive
+
 ## Cypherpunk mailing list
 
 Cypherpunk mailing list after pre processing (initial pre process).
