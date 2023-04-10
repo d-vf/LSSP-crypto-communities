@@ -25,12 +25,24 @@ E.g
 
 * breaking list and running in // 
 
-Run multiprocess (calling process_1.py)
-For AWS (multiprocerss (calling process_1_aws.py)
+### Local Machine
 
-Check folders (last request to ajust list)
+Run multi_process.py (calling scripts = ['bitcointalk/process_1.py', 'bitcointalk/process_2.py', 'bitcointalk/process_3.py', 'bitcointalk/process_4.py']
+ )
+ 
+###For AWS 
 
-change: path, '/usr/bin/python3', check google drive
+Run multiprocess_btc_aws.py (calling scripts = ['process_1_aws.py', 'process_2_aws.py', 'process_3_aws.py', 'process_4_aws.py']
+
+## Check folders (last request to adjust list)
+
+list_posts = pd.read_csv('/home/ec2-user/bitcointalk_data.csv')
+
+## Extract/Adjust the links from 10,000 to 20,000 from the DataFrame
+url_list = list_posts['Link'].iloc[15327:30000].tolist()
+
+## change: path, '/usr/bin/python3', check google drive and webdriver
+
 
 ## Cypherpunk mailing list
 
