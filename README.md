@@ -30,7 +30,7 @@ E.g
 Run multi_process.py (calling scripts = ['bitcointalk/process_1.py', 'bitcointalk/process_2.py', 'bitcointalk/process_3.py', 'bitcointalk/process_4.py']
  )
  
-###For AWS 
+### For AWS 
 
 Run multiprocess_btc_aws.py (calling scripts = ['process_1_aws.py', 'process_2_aws.py', 'process_3_aws.py', 'process_4_aws.py']
 
