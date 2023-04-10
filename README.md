@@ -10,10 +10,8 @@
    * get_post_from_list.py
    * uses the list from 1 and gets all post (+ all nav pages) and store id, post, title, date and url
    * output folder: output_data/ (each topic)
- 
-
-To do:
-approx 60000, that with 1  422.78 seconds per request would need more than 1 week to get all.
+   
+- 3. Approx 60000, that with 1  422.78 seconds per request would need more than 1 week to get all.
 
 E.g 
 * Navigating to page 1 of https://bitcointalk.org/index.php?topic=20333.0
@@ -25,24 +23,22 @@ E.g
 
 * breaking list and running in // 
 
-### Local Machine
+#### Local Machine
 
 Run multi_process.py (calling scripts = ['bitcointalk/process_1.py', 'bitcointalk/process_2.py', 'bitcointalk/process_3.py', 'bitcointalk/process_4.py']
  )
  
-### For AWS 
+#### For AWS 
 
 Run multiprocess_btc_aws.py (calling scripts = ['process_1_aws.py', 'process_2_aws.py', 'process_3_aws.py', 'process_4_aws.py']
 
-## Check folders (last request to adjust list)
+#### Check folders (last request to adjust lists)
 
 list_posts = pd.read_csv('/home/ec2-user/bitcointalk_data.csv')
 
-## Extract/Adjust the links from 10,000 to 20,000 from the DataFrame
 url_list = list_posts['Link'].iloc[15327:30000].tolist()
 
-## change: path, '/usr/bin/python3', check google drive and webdriver
-
+#### change: path, '/usr/bin/python3', check google drive and webdriver
 
 ## Cypherpunk mailing list
 
