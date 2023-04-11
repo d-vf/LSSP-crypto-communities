@@ -11,7 +11,7 @@ ssh -i /Users/path/xxx.pem ec2-user@ec2-00-00-000-000.compute-1.amazonaws.com
 ## Linux
 sudo yum update
 
-### pythop
+### python
 sudo yum install python3 python3-pip
 
 ### packages
@@ -26,7 +26,7 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 #### Install the Google Chrome package using yum:
 sudo yum localinstall -y google-chrome-stable_current_x86_64.rpm
 
-([ec2-user@ip-172-31-85-208 ~]$ google-chrome --version
+([ec2-user@ec2-000-00-00-000 ~]$ google-chrome --version
 Google Chrome 112.0.5615.49 )
 
 
@@ -50,7 +50,7 @@ scp -i path/xxx.pem /Users/path//LSSP-project/process_1_aws.py ec2-user@ec2-000-
 
 #### Multiple
 
-scp -i path/xxx.pem /Users/dianavieirafernandes/Desktop/LSSP-project/bitcointalk_data.csv /path/LSSP-project/bitcointalk/process_1_aws.py ec2-user@ec2-000-00-00-000.compute-1.amazonaws.com:/home/ec2-user/
+scp -i path/xxx.pem path/LSSP-project/bitcointalk_data.csv /path/LSSP-project/bitcointalk/process_1_aws.py ec2-user@ec2-000-00-00-000.compute-1.amazonaws.com:/home/ec2-user/
 
 ### Checking
 ssh -i path/xxx.pem ec2-user@ec2-000-00-00-000.compute-1.amazonaws.com
