@@ -43,11 +43,11 @@ url_list = list_posts['Link'].iloc[15327:30000].tolist()
 
 ## Cypherpunk mailing list
 
-Cypherpunk mailing list after pre processing (initial pre process).
+Cypherpunk mailing list after pre processing (pre process + timedate fixed (to UTC), removed duplicates).
 
 (Merged dataset with cypherpunks mailing list (From, Date, Subject and Body)
 
-https://zenodo.org/record/7765080#.ZBzhmOzMKcs
+https://zenodo.org/record/7765080#.ZBzhmOzMKcs (initial + timedate fixed)
 
 To do:
 
