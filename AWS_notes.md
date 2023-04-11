@@ -1,10 +1,10 @@
 
 
 ## (keys)
-chmod 400 /Users/dianavieirafernandes/Desktop/scraper_dvf.pem
+chmod 400 /Users/path/xxxx.pem
 
 ## Access AWS 
-ssh -i /Users/dianavieirafernandes/Desktop/scraper_dvf.pem ec2-user@ec2-52-23-186-250.compute-1.amazonaws.com
+ssh -i /Users/path/xxx.pem ec2-user@ec2-00-00-000-000.compute-1.amazonaws.com
 
 # Install
 
@@ -44,38 +44,36 @@ Note: The WebDriver version should match the version of Google Chrome installed 
 service = Service('/usr/local/bin/chromedriver')
 
 #### Transfer the script to the EC2 instance using SCP:
-scp -i /Users/dianavieirafernandes/Desktop/scraper_dvf.pem /Users/dianavieirafernandes/Desktop/LSSP-project/bitcointalk_data.csv ec2-user@ip-172-31-88-222.compute-1.amazonaws.com:/home/ec2-user/
+scp -i path/xxx.pem /Users/path/LSSP-project/bitcointalk_data.csv ec2-user@ip-000-00-00-000.compute-1.amazonaws.com:/home/ec2-user/
 
-scp -i /Users/dianavieirafernandes/Desktop/scraper_dvf.pem /Users/dianavieirafernandes/Desktop/LSSP-project/process_1_aws.py ec2-user@ec2-52-23-186-250.compute-1.amazonaws.com:/home/ec2-user/
+scp -i path/xxx.pem /Users/path//LSSP-project/process_1_aws.py ec2-user@ec2-000-00-00-000.compute-1.amazonaws.com:/home/ec2-user/
 
 #### Multiple
 
-scp -i /Users/dianavieirafernandes/Desktop/scraper_dvf.pem /Users/dianavieirafernandes/Desktop/LSSP-project/bitcointalk_data.csv /Users/dianavieirafernandes/Desktop/LSSP-project/bitcointalk/process_1_aws.py ec2-user@ec2-52-23-186-250.compute-1.amazonaws.com:/home/ec2-user/
+scp -i path/xxx.pem /Users/dianavieirafernandes/Desktop/LSSP-project/bitcointalk_data.csv /path/LSSP-project/bitcointalk/process_1_aws.py ec2-user@ec2-000-00-00-000.compute-1.amazonaws.com:/home/ec2-user/
 
 ### Checking
-ssh -i /Users/dianavieirafernandes/Desktop/scraper_dvf.pem ec2-user@ec2-52-23-186-250.compute-1.amazonaws.com
+ssh -i path/xxx.pem ec2-user@ec2-000-00-00-000.compute-1.amazonaws.com
 cd /home/ec2-user/
 ls
 
 ### Transfer the output data:
-scp -i /path/to/your-key-pair.pem ec2-user@your-instance-public-dns:/path/to/output_data /path/to/local_destination/
-
-scp -i /Users/dianavieirafernandes/Desktop/scraper_dvf.pem  ec2-user@ec2-54-158-110-219.compute-1.amazonaws.com:/home/ec2-user/output_data /Users/dianavieirafernandes/Desktop/
+scp -i path/xxx.pem ec2-user@your-instance-public-dns:/path/to/output_data /path/to/local_destination/
 
 ### for csv file 
-scp -i /Users/dianavieirafernandes/Desktop/scraper_dvf.pem /Users/dianavieirafernandes/Desktop/bitcointalk_data.csv ec2-user@ec2-54-158-110-219.compute-1.amazonaws.com:/home/ec2-user/
+scp -i path/xxx.pem /path/bitcointalk_data.csv ec2-user@ec2-000-00-00-000.compute-1.amazonaws.com:/home/ec2-user/
 
 ### Update the script to use the correct CSV file path:
-scp -i /path/to/my-key-pair.pem /path/to/my_script.py ec2-user@ec2-54-123-45-678.compute-1.amazonaws.com:/home/ec2-user/
+scp -i path/xxx.pem /path/to/my_script.py ec2-user@ec2-000-00-00-000.compute-1.amazonaws.com:/home/ec2-user/
 
-scp -i /Users/dianavieirafernandes/Desktop/scraper_dvf.pem /Users/dianavieirafernandes/Desktop/LSSP-project/bitcointalk/multiprocess_btc_aws.py ec2-user@ec2-54-158-110-219.compute-1.amazonaws.com:/home/ec2-user/
+scp -i path/xxx.pem /path//LSSP-project/bitcointalk/multiprocess_btc_aws.py ec2-user@ec2-000-00-00-000.compute-1.amazonaws.com:/home/ec2-user/
 
 ### Run the script on the EC2 instance:
 python3 process_1_aws.py
 
 # checking
 
-scp -i /Users/dianavieirafernandes/Desktop/scraper_dvf.pem -r ec2-user@your-ec2-instance:/path/to/your/folder /path/to/your/local/folder
+scp -i path/xxx.pem -r ec2-user@your-ec2-instance:/path/to/your/folder /path/to/your/local/folder
 
 ### Erasing
 
