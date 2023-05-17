@@ -2,6 +2,7 @@ import pandas as pd
 from email.utils import parseaddr
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
+import numpy as np
 
 root_folder = '/home/dianaimf/'
 input_file = root_folder + 'merged_data.csv'
@@ -10,8 +11,11 @@ output_file = root_folder + 'merged_data_with_replaced_emails.csv'
 allmails_data_time_parsed_utc_LDA = pd.read_csv(input_file, low_memory=False)
 
 def extract_email(email):
-    name, addr = parseaddr(email)
-    return addr
+    if isinstance(email, str) and email.strip():  # Check if it's a non-empty string
+        name, addr = parseaddr(email)
+        return addr
+    else:
+        return np.nan
 
 def normalize_email(email):
     return email.strip().lower()
