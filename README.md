@@ -1,7 +1,11 @@
 # LSSP-crypto-communities
 
+## Add description
 
-## Cypherpunk mailing list
+TBD
+
+
+### Cypherpunk mailing list
 
 Cypherpunk mailing list after pre processing (pre process + timedate fixed (to UTC), removed duplicates).
 
@@ -9,7 +13,7 @@ Cypherpunk mailing list after pre processing (pre process + timedate fixed (to U
 
 https://zenodo.org/record/7765080#.ZBzhmOzMKcs (initial + timedate fixed)
 
-## Bitcointalk.org scrape
+### Bitcointalk.org scrape
 
 Bitcoin scrape (April-may 2023) or board 1 (https://bitcointalk.org/index.php?board=1.0) with within this board/list 
 
