@@ -1,3 +1,15 @@
+1. Data Processing:  LSSP_cypherpunks_dataprep_I .ipynb
+
+1. Initial preprocessing namely:
+
+- merging 3 data sources
+
+- fixing dates and putting all dates back to UTC (final output: allmails_data_time_parsed_utc)
+
+- removing duplicates
+
+2. text treatment and LDA: cypherpunks_lda.ipynb
+
 Functions in cypherpunks_lda.py
 
 * `download_data()`: Downloads the Cypherpunks forum posts dataset from GitHub.
